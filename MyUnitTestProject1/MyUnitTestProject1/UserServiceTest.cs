@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MyUnitTestProject.Controllers;
 using MyUnitTestProject.Models;
@@ -38,10 +39,24 @@ namespace MyUnitTestProject1
         [InlineData("Lai")]
         public void GetUsersByNameTest(string name)
         {
-            var users = new List<User> { new User { Id = 1, Name = "Hung", Age = 24, Nation = "VietNam" } };
-            mockUserService.Setup(p => p.GetUsersByName(name));
+            // Setup method GetUsersByName alway return empty list User
+            mockUserService.Setup(p => p.GetUsersByName(name)).Returns(new List<User>());
+
+            // Setup method retrun list User when input = "Hung"
+            if (name == "Hung")
+            {
+                var users = new List<User> 
+                { 
+                    new User { Id = 1, Name = "Hung", Age = 24, Nation = "VietNam" },
+                    new User { Id = 1, Name = "Hung", Age = 57, Nation = "USA" }
+                };
+                mockUserService.Setup(p => p.GetUsersByName(name)).Returns(users);
+            }
+
             UserController userController = new UserController(mockUserService.Object);
             var result = userController.GetUserByName(name);
+
+            // Test success when result is not null
             Assert.NotNull(result);
         }
 

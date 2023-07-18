@@ -16,10 +16,14 @@ namespace MyUnitTestProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUserByName(string name)
+        public IActionResult? GetUserByName(string name)
         {
             var result = _userService.GetUsersByName(name);
-            return Ok(result);
+            if(result?.Count > 0)
+            {
+                return Ok(result);
+            }
+            return null;
         }
     }
 }
