@@ -6,5 +6,6 @@
         public string? Name { get; set; }
         public int Age { get; set; }
         public string? Nation { get; set; }
+        public string? Description { get; set; }
     }
 }
