@@ -1,14 +1,25 @@
-﻿using MyUnitTestProject.Models;
+﻿using MyUnitTestProject.Infrastructure;
+using MyUnitTestProject.Models;
 
 namespace MyUnitTestProject.Service
 {
-    public class UserService
+    public interface IUserService
     {
-        private List<User> _users { get; set; }
+        public List<User> ListUser { get; set; }
+        public bool IsUserBelow20(int id);
+        public List<User> GetUsersByName(string name);
+        public bool AddUser(User user);
+        public bool DoSomething(string value);
+
+    }
+
+    public class UserService: IUserService
+    {
+        public List<User> ListUser { get; set; }
 
         public UserService()
         {
-            _users = new List<User>
+            ListUser = new List<User>
             {
                 new User{Id = 1, Name = "Hung", Age = 24, Nation = "VietNam"},
                 new User{Id = 2, Name = "Joe", Age = 17, Nation = "NetherLand"},
@@ -21,14 +32,15 @@ namespace MyUnitTestProject.Service
             };
         }
 
+
         public bool IsUserBelow20(int id)
         {
-            return _users.Any(x => x.Age < 20 && x.Id == id);
+            return ListUser.Any(x => x.Age < 20 && x.Id == id);
         }
 
         public List<User> GetUsersByName(string name)
         {
-            var users = _users.Where(x => x.Name == name);
+            var users = ListUser.Where(x => x.Name == name);
             if (users != null)
             {
                 return users.ToList();
@@ -43,15 +55,52 @@ namespace MyUnitTestProject.Service
             {
                 return false;
             }
-            else if(_users.Any(x => x.Id == user.Id))
+            else if (ListUser.Any(x => x.Id == user.Id))
             {
                 return false;
             }
 
             // Add new user
-            _users.Add(user);
+            ListUser.Add(user);
 
             return true;
         }
+
+        public bool DoSomething(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Working with dbContext
+        //public List<User> GetUsersByName(string name)
+        //{
+        //    var users = _contest.Users.Where(x => x.Name == name);
+        //    if (users != null)
+        //    {
+        //        return users.ToList();
+        //    }
+        //    return new List<User>();
+        //}
+
+        //public bool AddUser(User user)
+        //{
+        //    // Add fail when user is null or user id exist in list user
+        //    if (user == null)
+        //    {
+        //        return false;
+        //    }
+        //    else if(_contest.Users.Any(x => x.Id == user.Id))
+        //    {
+        //        return false;
+        //    }
+
+        //    // Add new user
+        //    _contest.Users.Add(user);
+
+        //    _contest.SaveChanges();
+
+        //    return true;
+        //}
+        #endregion
     }
 }
