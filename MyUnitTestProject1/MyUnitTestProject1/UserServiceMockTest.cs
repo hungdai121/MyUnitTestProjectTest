@@ -4,6 +4,7 @@ using MyUnitTestProject.Controllers;
 using MyUnitTestProject.Models;
 using MyUnitTestProject.Service;
 using MyUnitTestProject1.Theory;
+using FluentAssertions;
 
 namespace MyUnitTestProject1
 {
@@ -78,11 +79,11 @@ namespace MyUnitTestProject1
             userService.ListUser = users;
 
             // Test success when List user lenght equal 3
-            Assert.True(userService.ListUser.Count == 3);
+            userService.ListUser.Count.Should().Be(2);
 
             //Test success when List user add 1 user and the list lenght equal 4
             userService.ListUser.Add(new User { Id = 4, Name = "Mario", Age = 35, Nation = "Italy" });
-            Assert.True(userService.ListUser.Count == 4);
+            userService.ListUser.Count.Should().Be(4);
         }
 
         [Theory]
